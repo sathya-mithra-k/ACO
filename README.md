@@ -1,90 +1,73 @@
-# 🐜 Timetable Optimization using Ant Colony Optimization (ACO)
+# Timetable Optimization using Hybrid GA + ACO (Genetic Algorithm + Ant Colony Optimization)
 
-This project implements a **Timetable Generator and Optimizer** using **Ant Colony Optimization (ACO)** in Python. It creates a weekly class schedule that allocates subjects and professors efficiently while minimizing violations related to time constraints, professor workload, and distribution of subjects.
-
----
-
-## 📌 Features
-
-- Generates an initial population of randomized timetables.
-- Evaluates the fitness of each solution based on multiple constraints.
-- Uses ACO to iteratively improve timetable quality.
-- Incorporates pheromone evaporation and reinforcement to guide optimization.
-- Penalizes unbalanced, overworked, or repetitive schedules.
-- Outputs the optimal timetable found with the corresponding fitness score.
-
----
-
-## 🧠 Problem Statement
-
-Create a valid and optimized weekly timetable given:
-- A fixed number of subjects and professors.
-- Required teaching hours per subject.
-- Maximum allowable hours per professor.
-- A fixed number of periods per day and days per week.
-
-The optimization ensures:
-- Each subject is taught for the required time.
-- No professor is over-assigned.
-- Boring/repetitive subject sequences are avoided.
-- Subjects are distributed fairly across all days.
-
----
-
-## ⚙️ How It Works
-
-1. **Initialization**  
-   A set of ants (candidate solutions) are initialized with random timetables.
-
-2. **Fitness Evaluation**  
-   Each solution is scored based on violations like:
-   - Subject time under/over allocation
-   - Professor overload
-   - Consecutive same-subject periods
-   - Uneven distribution of subjects
-
-3. **Pheromone Update**  
-   Good solutions reinforce their structure using pheromone deposition.
-
-4. **Evaporation**  
-   Old pheromones are reduced to prevent local optima stagnation.
-
-5. **Iteration**  
-   The process continues for a defined number of iterations to find the best solution.
-
----
-
-## 📥 Input
-
-The program prompts for:
+This project implements a **hybrid optimization system** combining **Genetic Algorithms (GA)** and **Ant Colony Optimization (ACO)** to generate optimal weekly timetables. It simulates intelligent scheduling by modeling each timetable as a candidate solution and uses swarm intelligence to iteratively improve the fitness of generated timetables.
 
 
-This is the number of periods per day. Default settings:
-- `days = 5` (working days)
-- `t_subjects = 6` (subjects A-F)
-- `t_prof = 3` (professors X, Y, Z)
-- Subject-professor map: `YXXZYX`
+## Features
 
----
+- Generates an initial population of randomized timetables (GA-like initialization).
+- Evaluates each solution using a constraint-based fitness function.
+- Applies ACO principles to reinforce better schedules via pheromone trails.
+- Penalizes undesirable scheduling patterns (like repetitive subjects or overworked professors).
+- Outputs the most optimal timetable found after iterative learning.
 
-## 📦 Code Structure
 
-- `Ant`: Represents a timetable (path) for an individual ant.
-- `ACO`: Contains the full optimization loop, fitness logic, and pheromone updates.
-- `pheromone_matrix`: Tracks the strength of pheromone trails for each (subject, day, period) combination.
-- `fitness()`: Key function evaluating how good a timetable is based on violations.
-- `aco()`: Main loop to run the optimization for a set number of iterations.
+## Optimization Strategy
 
----
+This solution **hybridizes Genetic Algorithm and Ant Colony Optimization**:
 
-## 🚀 Getting Started
+### Genetic Algorithm Aspects
+- **Chromosome Representation**: A timetable is a chromosome where each gene is a subject assigned to a period.
+- **Population Initialization**: A population of random schedules is generated.
+- **Random Variation**: Initial random schedules act as mutation-like operators.
+
+### Ant Colony Optimization Aspects
+- **Ants as Solutions**: Each ant represents a candidate timetable.
+- **Pheromone Trails**: A 3D pheromone matrix guides the subject selection based on historical success.
+- **Evaporation**: Older pheromones decay over time to avoid premature convergence.
+- **Pheromone Reinforcement**: High-fitness solutions deposit more pheromone, influencing future generations.
+
+
+## How It Works
+
+1. **User Input**: Total periods per day.
+2. **Initialize Population**: Randomly generate timetables (ants).
+3. **Evaluate Fitness**: Measure violations (missing hours, overwork, repetition, etc.).
+4. **Pheromone Update**: Improve probabilities for better choices.
+5. **Evaporation**: Reduce stale influence.
+6. **Repeat**: Iterate until the best solution is found.
+
+
+## Input
+
+The program asks:
+ENTER TOTAL REQUIRED PERIODS:
+
+This defines the number of periods per day.
+
+### Default Parameters
+
+- `days = 5` (Working Days)
+- `subjects = "ABCDEF"`
+- `profs = "XYZ"`
+- `subject-professor map = "YXXZYX"`
+- `sub_time = [7, 3, 6, 4, 5, 5]` (required hours)
+- `prof_time = [13, 12, 5]` (max hours per prof)
+- `population_size = 100`
+- `iterations = 100`
+- `evaporation_rate = 0.1`
+- `pheromone_constant = 1.0`
+note: These parameter can also be set as user defined
+
+## Running the Code
 
 ### Requirements
 
 - Python 3.x
-- `numpy`
+- `numpy` library
 
-### Run the Program
+### Run
 
 ```bash
 python timetable_aco.py
+
